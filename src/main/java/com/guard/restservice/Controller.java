@@ -4,7 +4,9 @@ import com.guard.restservice.tasks.Task;
 import com.guard.restservice.tasks.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -22,21 +24,28 @@ public class Controller {
     }
 
     @GetMapping("/")
-    public String showIndex() {
-        return "hello";
+    ModelAndView
+    showIndex() {
+        ModelAndView mav = new ModelAndView("hello");
+        return mav;
     }
 
-    @GetMapping("/login_form")
-    public String showLoginForm(Model model) {
+    @GetMapping("/login")
+    ModelAndView
+    showLoginForm(Model model) {
         Operator operator = new Operator();
         model.addAttribute("operator", operator);
-        return "login_form";
+        ModelAndView mav = new ModelAndView("login");
+        return mav;
     }
 
-    @PostMapping("/authentication")
-    public String authenticateOperator(@ModelAttribute Operator operator, Model model) {
-        model.addAttribute("operator", operator);
-        return "display_form";
+    @PostMapping("/save")
+    ModelAndView
+    handleInput(@RequestParam("email") String email, @RequestParam("password") String password) {
+        ModelAndView mav = new ModelAndView("result");
+        mav.addObject("email", email);
+        mav.addObject("password", password);
+        return mav;
     }
 
     @GetMapping
