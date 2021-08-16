@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Login as employee</title>
-
 </head>
 <body>
 <h2>Employee Registration</h2>
 <form th:action="@{/profile}" th:object="${operator}" method="post">
-
         <div>
             <label>Email</label>
             <input type="email" th:field="*{email}">

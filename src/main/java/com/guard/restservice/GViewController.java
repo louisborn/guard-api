@@ -24,8 +24,7 @@ public class GViewController {
     @GetMapping("/")
     ModelAndView
     showIndex() {
-        ModelAndView mav = new ModelAndView("hello");
-        return mav;
+        return new ModelAndView("hello");
     }
 
     @GetMapping("/login")
@@ -33,8 +32,7 @@ public class GViewController {
     showLoginForm(Model model) {
         Operator operator = new Operator();
         model.addAttribute("operator", operator);
-        ModelAndView mav = new ModelAndView("login");
-        return mav;
+        return new ModelAndView("login");
     }
 
     @PostMapping("/profile")
