@@ -14,7 +14,7 @@ public class OperatorConfig {
     @Bean
     CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository) {
         return args -> {
-            Operator john = new Operator("John", "john.williams@bosch.de", "abc123", "");
+            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "");
 
             Task task1 = new Task("Check B1", "Building B, ground floor", "ex12345",true);
 
