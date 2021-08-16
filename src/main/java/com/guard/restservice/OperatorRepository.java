@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OperatorRepository extends JpaRepository<Operator, Long> {
 
-    @Query("SELECT o FROM Operator o WHERE o.password=?1")
-    Optional<Operator> findOperatorByEmail(String password);
+    @Query("SELECT o FROM Operator o WHERE o.email=?1")
+    Optional<Operator> findOperatorByEmail(String email);
 }
