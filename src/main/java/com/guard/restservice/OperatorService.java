@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 public class OperatorService {
@@ -23,8 +22,27 @@ public class OperatorService {
         return operatorRepository.findAll();
     }
 
-    //Note: should return an boolean. List only for debugging.
-    public List<String> validateOperatorLogin(String email, String password) {
+
+    public List<String> startOperatorLogin(String email, String password) {
+        Optional<Operator> operator = validateOperatorInput(email, password);
+        if(operator.isEmpty()) {
+            throw new IllegalStateException("Could not start operator login");
+        }
+        String token = createOperatorToken(email);
+        boolean isLoginSuccessful = updateOperatorToken(token, operator);
+        if(!isLoginSuccessful) {
+            throw new IllegalStateException("Operator login failed");
+        }
+        //For debugging only
+        List<String> result = new ArrayList<>();
+        result.add(operator.get().getEmail());
+        result.add(operator.get().getPassword());
+        result.add(operator.get().getToken());
+
+        return result;
+    }
+
+    public Optional<Operator> validateOperatorInput(String email, String password) {
         Optional<Operator> operator = operatorRepository.findOperatorByEmail(email);
         if (operator.isEmpty()) {
             throw new IllegalStateException("Operator not found");
@@ -32,12 +50,19 @@ public class OperatorService {
         if(!Objects.equals(operator.get().getPassword(), password)) {
             throw new IllegalStateException("Wrong password");
         }
+        return operator;
+    }
 
-        List<String> result = new ArrayList<String>();
-        result.add(operator.get().getEmail());
-        result.add(operator.get().getPassword());
-        result.add(operator.get().getName());
+    public String createOperatorToken(String email) {
+        return Base64.getEncoder().encodeToString(email.getBytes(StandardCharsets.UTF_8));
+    }
 
-        return result;
+    @Transactional
+    public boolean updateOperatorToken(String token, Optional<Operator> operator) {
+        if(operator.isEmpty()) {
+            throw new IllegalStateException("Could not update operator");
+        }
+        operator.get().setToken(token);
+        return true;
     }
 }
