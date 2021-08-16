@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @RestController
-//@RequestMapping(path = "api/v1/guard")
+@RequestMapping(path = "api/v1/guard")
 public class Controller {
 
     private final OperatorService operatorService;
