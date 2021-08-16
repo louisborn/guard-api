@@ -38,18 +38,18 @@ public class Controller {
         return mav;
     }
 
-    @PostMapping("/save")
+    @PostMapping("/profile")
     ModelAndView
     handleInput(@RequestParam("email") String email, @RequestParam("password") String password) {
         ModelAndView mav = new ModelAndView("result");
-        List<String> operator = operatorService.validateOperatorLogin(email, password);
+        List<String> operator = operatorService.startOperatorLogin(email, password);
         mav.addObject("email", operator.get(0));
         mav.addObject("password", operator.get(1));
-        mav.addObject("name", operator.get(2));
+        mav.addObject("token", operator.get(2));
         return mav;
     }
 
-    @GetMapping
+    @GetMapping("/operators")
     public List<Operator> getOperators() {
         return operatorService.getOperators();
     }
