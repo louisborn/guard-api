@@ -45,6 +45,7 @@ public class Controller {
         List<String> operator = operatorService.validateOperatorLogin(email, password);
         mav.addObject("email", operator.get(0));
         mav.addObject("password", operator.get(1));
+        mav.addObject("name", operator.get(2));
         return mav;
     }
 

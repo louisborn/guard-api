@@ -36,6 +36,7 @@ public class OperatorService {
         List<String> result = new ArrayList<String>();
         result.add(operator.get().getEmail());
         result.add(operator.get().getPassword());
+        result.add(operator.get().getName());
 
         return result;
     }
