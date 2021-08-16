@@ -12,21 +12,24 @@ public class Operator {
     private String name;
     private String email;
     private String password;
+    private String token;
 
     public Operator() {
     }
 
-    public Operator(long id, String name, String email, String password) {
+    public Operator(long id, String name, String email, String password, String token) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.token = token;
     }
 
-    public Operator(String name, String email, String password) {
+    public Operator(String name, String email, String password, String token) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.token = token;
     }
 
     public long getId() {
@@ -42,4 +45,6 @@ public class Operator {
     }
 
     public String getPassword() { return password; }
+
+    public String getToken() { return token; }
 }
