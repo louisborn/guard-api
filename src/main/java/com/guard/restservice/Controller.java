@@ -22,32 +22,7 @@ public class Controller {
         this.taskService = taskService;
     }
 
-    @GetMapping("/")
-    ModelAndView
-    showIndex() {
-        ModelAndView mav = new ModelAndView("hello");
-        return mav;
-    }
 
-    @GetMapping("/login")
-    ModelAndView
-    showLoginForm(Model model) {
-        Operator operator = new Operator();
-        model.addAttribute("operator", operator);
-        ModelAndView mav = new ModelAndView("login");
-        return mav;
-    }
-
-    @PostMapping("/profile")
-    ModelAndView
-    handleInput(@RequestParam("email") String email, @RequestParam("password") String password) {
-        ModelAndView mav = new ModelAndView("result");
-        List<String> operator = operatorService.startOperatorLogin(email, password);
-        mav.addObject("email", operator.get(0));
-        mav.addObject("password", operator.get(1));
-        mav.addObject("token", operator.get(2));
-        return mav;
-    }
 
     @GetMapping("/operators")
     public List<Operator> getOperators() {
