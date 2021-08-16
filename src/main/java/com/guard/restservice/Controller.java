@@ -4,14 +4,14 @@ import com.guard.restservice.tasks.Task;
 import com.guard.restservice.tasks.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/guard")
+//@RequestMapping(path = "api/v1/guard")
 public class Controller {
 
     private final OperatorService operatorService;
@@ -43,8 +43,9 @@ public class Controller {
     ModelAndView
     handleInput(@RequestParam("email") String email, @RequestParam("password") String password) {
         ModelAndView mav = new ModelAndView("result");
-        mav.addObject("email", email);
-        mav.addObject("password", password);
+        List<String> operator = operatorService.getOperatorByEmailAndPassword(email, password);
+        mav.addObject("email", operator.get(0));
+        mav.addObject("password", operator.get(1));
         return mav;
     }
 
@@ -53,10 +54,10 @@ public class Controller {
         return operatorService.getOperators();
     }
 
-    @GetMapping(path = "/operators/{password}")
+    /*@GetMapping(path = "/operators/{password}")
     public List<Operator> getOperatorsByEmail(@PathVariable("password") String password) {
-        return operatorService.getOperatorsByEmail(password);
-    }
+        return operatorService.getOperatorByEmailAndPassword(password);
+    }*/
 
     @GetMapping(path = "/tasks/{token}")
     public List<Task> getTasks(@PathVariable("token") String token) {
