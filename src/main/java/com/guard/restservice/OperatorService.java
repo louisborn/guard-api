@@ -23,7 +23,8 @@ public class OperatorService {
         return operatorRepository.findAll();
     }
 
-    public List<String> getOperatorByEmailAndPassword(String email, String password) {
+    //Note: should return an boolean. List only for debugging.
+    public List<String> validateOperatorLogin(String email, String password) {
         Optional<Operator> operator = operatorRepository.findOperatorByEmail(email);
         if (operator.isEmpty()) {
             throw new IllegalStateException("Operator not found");
