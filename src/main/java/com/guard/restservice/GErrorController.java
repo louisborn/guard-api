@@ -10,7 +10,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class GuardErrorController implements ErrorController {
+public class GErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     @Override
     public String getErrorPath() {
