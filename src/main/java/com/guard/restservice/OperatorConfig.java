@@ -16,12 +16,14 @@ public class OperatorConfig {
         return args -> {
             Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "");
 
-            Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "pending","10:32:22",  "2021-09-18", "Please check B1 thoroughly \n" +
-                    "once. Suspicion of intrusion.",true);
+            Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
+                    "Please check B1 thoroughly once. Suspicion of intrusion.", true,true);
+            Task task2 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
+                    "Please check B1 thoroughly once. Suspicion of intrusion.", false,true);
 
             operatorRepository.saveAll(List.of(john));
 
-            taskRepository.saveAll(List.of(task1));
+            taskRepository.saveAll(List.of(task1, task2));
         };
     }
 }

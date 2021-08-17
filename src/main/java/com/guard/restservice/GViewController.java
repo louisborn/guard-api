@@ -18,7 +18,7 @@ public class GViewController {
     private final OperatorService operatorService;
 
     @Autowired
-    public GViewController(OperatorService operatorService, TaskService taskService) {
+    public GViewController(OperatorService operatorService) {
         this.operatorService = operatorService;
     }
 
