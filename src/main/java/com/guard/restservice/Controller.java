@@ -14,12 +14,10 @@ import java.util.List;
 public class Controller {
 
     private final OperatorService operatorService;
-    private final TaskService taskService;
 
     @Autowired
-    public Controller(OperatorService operatorService, TaskService taskService) {
+    public Controller(OperatorService operatorService) {
         this.operatorService = operatorService;
-        this.taskService = taskService;
     }
 
 
