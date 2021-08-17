@@ -1,5 +1,6 @@
 package com.guard.restservice.tasks;
 
+import com.guard.restservice.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +10,19 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final OperatorService operatorService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, OperatorService operatorService) {
         this.taskRepository = taskRepository;
+        this.operatorService = operatorService;
     }
 
-    public List<Task> getTasks(String token) {
-        boolean exists = taskRepository.findTaskByToken(token).isPresent();
-        if (!exists) {
-            throw new IllegalStateException("access denied");
+    public List<Task> getTasksByOperatorId(String token, long operatorId) {
+        boolean hasAccess = operatorService.getOperatorByToken(token);
+        if(!hasAccess){
+            throw new IllegalStateException("Access denied");
         }
-        return taskRepository.findAll();
+        return taskRepository.findTaskByOperatorId(operatorId);
     }
 }
