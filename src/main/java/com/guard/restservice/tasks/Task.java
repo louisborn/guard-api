@@ -9,36 +9,90 @@ public class Task {
     @SequenceGenerator(name = "task_sequence", sequenceName = "task_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_sequence")
     private long id;
+    private long operatorId;
     private String title;
     private String location;
-    private String token;
+    private String status;
+    private String time;
+    private String date;
+    private String description;
     private boolean hasPriority;
 
     public Task() {
     }
 
-    public Task(long id, String title, String location, String token, boolean hasPriority) {
+    public Task(long id,
+                long operatorId,
+                String title,
+                String location,
+                String status,
+                String time,
+                String date,
+                String description,
+                boolean hasPriority) {
         this.id = id;
+        this.operatorId = operatorId;
         this.title = title;
         this.location = location;
-        this.token = token;
+        this.status = status;
+        this.time = time;
+        this.date = date;
+        this.description = description;
         this.hasPriority = hasPriority;
     }
 
-    public Task(String title, String location, String token, boolean hasPriority) {
+    public Task(
+            long operatorId,
+            String title,
+            String location,
+            String status,
+            String time,
+            String date,
+            String description,
+            boolean hasPriority) {
+        this.operatorId = operatorId;
         this.title = title;
         this.location = location;
-        this.token = token;
+        this.status = status;
+        this.time = time;
+        this.date = date;
+        this.description = description;
         this.hasPriority = hasPriority;
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
+    public long getOperatorId() {
+        return operatorId;
+    }
 
-    public String getLocation() { return location; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getToken() { return token; }
+    public String getLocation() {
+        return location;
+    }
 
-    public boolean getPriority() { return hasPriority; }
+    public String getStatus() {
+        return status;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isHasPriority() {
+        return hasPriority;
+    }
 }
