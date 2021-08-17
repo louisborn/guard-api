@@ -21,32 +21,28 @@ public class TaskService {
     }
 
     public List<Task> getTasks(String token) {
-        boolean hasAccess = operatorService.getOperatorByToken(token);
-        if(!hasAccess){
+        if(!operatorService.checkTokenValidity(token)){
             throw new IllegalStateException("Access denied");
         }
         return taskRepository.findAll();
     }
 
     public Optional<Task> getTaskById(String token, long taskId) {
-        boolean hasAccess = operatorService.getOperatorByToken(token);
-        if(!hasAccess){
+        if(!operatorService.checkTokenValidity(token)){
             throw new IllegalStateException("Access denied");
         }
         return taskRepository.findById(taskId);
     }
 
     public List<Task> getTasksByOperatorId(String token, long operatorId) {
-        boolean hasAccess = operatorService.getOperatorByToken(token);
-        if(!hasAccess){
+        if(!operatorService.checkTokenValidity(token)){
             throw new IllegalStateException("Access denied");
         }
         return taskRepository.findTaskByOperatorId(operatorId);
     }
 
     public void deleteTaskById(String token, Long taskId) {
-        boolean hasAccess = operatorService.getOperatorByToken(token);
-        if(!hasAccess){
+        if(!operatorService.checkTokenValidity(token)){
             throw new IllegalStateException("Access denied");
         }
         boolean exists = taskRepository.existsById(taskId);
@@ -58,8 +54,7 @@ public class TaskService {
 
     @Transactional
     public void deleteAllCompletedTasks(String token) {
-        boolean hasAccess = operatorService.getOperatorByToken(token);
-        if(!hasAccess){
+        if(!operatorService.checkTokenValidity(token)){
             throw new IllegalStateException("Access denied");
         }
         taskRepository.deleteAllCompletedTasks();
