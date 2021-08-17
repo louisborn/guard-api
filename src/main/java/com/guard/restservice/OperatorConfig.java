@@ -16,7 +16,8 @@ public class OperatorConfig {
         return args -> {
             Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "");
 
-            Task task1 = new Task("Check B1", "Building B, ground floor", "ex12345",true);
+            Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "pending","10:32:22",  "2021-09-18", "Please check B1 thoroughly \n" +
+                    "once. Suspicion of intrusion.",true);
 
             operatorRepository.saveAll(List.of(john));
 

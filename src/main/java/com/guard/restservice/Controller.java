@@ -33,9 +33,4 @@ public class Controller {
     public List<Operator> getOperatorsByEmail(@PathVariable("password") String password) {
         return operatorService.getOperatorByEmailAndPassword(password);
     }*/
-
-    @GetMapping(path = "/tasks/{token}")
-    public List<Task> getTasks(@PathVariable("token") String token) {
-        return taskService.getTasks(token);
-    }
 }

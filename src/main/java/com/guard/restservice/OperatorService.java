@@ -22,6 +22,10 @@ public class OperatorService {
         return operatorRepository.findAll();
     }
 
+    public boolean getOperatorByToken(String token) {
+        Optional<Operator> operator = operatorRepository.findOperatorByToken(token);
+        return operator.isPresent();
+    }
 
     public List<String> startOperatorLogin(String email, String password) {
         Optional<Operator> operator = validateOperatorInput(email, password);
@@ -62,7 +66,9 @@ public class OperatorService {
         if(operator.isEmpty()) {
             throw new IllegalStateException("Could not update operator");
         }
-        operator.get().setToken(token);
+        Operator operator1 = operator.get();
+        operator1.setToken(token);
+        operatorRepository.save(operator1);
         return true;
     }
 }
