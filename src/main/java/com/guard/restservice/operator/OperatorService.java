@@ -32,7 +32,7 @@ public class OperatorService {
 
     public List<String> startOperatorLogin(String email, String password) {
         Optional<Operator> operator = validateOperatorInput(email, password);
-        if(operator.isEmpty()) {
+        if(!operator.isPresent()) {
             throw new IllegalStateException("Could not start operator login");
         }
         String token = createOperatorToken(email);
@@ -51,7 +51,7 @@ public class OperatorService {
 
     public Optional<Operator> validateOperatorInput(String email, String password) {
         Optional<Operator> operator = operatorRepository.findOperatorByEmail(email);
-        if (operator.isEmpty()) {
+        if (!operator.isPresent()) {
             throw new IllegalStateException("Operator not found");
         }
         if(!Objects.equals(operator.get().getPassword(), password)) {
@@ -66,7 +66,7 @@ public class OperatorService {
 
     @Transactional
     public boolean updateOperatorToken(String token, Optional<Operator> operator) {
-        if(operator.isEmpty()) {
+        if(!operator.isPresent()) {
             throw new IllegalStateException("Could not update operator");
         }
         Operator operator1 = operator.get();

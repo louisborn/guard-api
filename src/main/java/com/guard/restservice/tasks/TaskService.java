@@ -64,7 +64,7 @@ public class TaskService {
     public void updateTaskStatus(String token, long id) {
         try {
             Optional<Task> task = getTaskById(token, id);
-            if(task.isEmpty()) {
+            if(!task.isPresent()) {
                 throw new IllegalStateException("Could not update operator");
             }
             Task task1 = task.get();
