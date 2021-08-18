@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class OperatorConfig {
+public class GConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository) {
