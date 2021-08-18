@@ -25,4 +25,11 @@ public class NoteService {
         return noteRepository.findAll();
     }
 
+    public void deleteNoteById(String token, Long id) {
+        if(!operatorService.checkTokenValidity(token)) {
+            throw new IllegalStateException("Access denied");
+        }
+        noteRepository.deleteById(id);
+    }
+
 }

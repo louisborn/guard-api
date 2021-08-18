@@ -1,11 +1,14 @@
 package com.guard.restservice.notes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class NoteController {
@@ -22,5 +25,16 @@ public class NoteController {
             @PathVariable("token") String token
     ) {
         return noteService.getNotes(token);
+    }
+
+    @DeleteMapping(path = "{token}/notes/delete/{noteId}")
+    public Map<String, Boolean> deleteNoteById(
+            @PathVariable("token") String token,
+            @PathVariable("noteId") Long id
+    ) {
+        noteService.deleteNoteById(token, id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 }
