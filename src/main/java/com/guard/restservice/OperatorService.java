@@ -21,8 +21,12 @@ public class OperatorService {
     public List<Operator> getOperators() {
         return operatorRepository.findAll();
     }
+    
+    public Optional<Operator> getOperatorByToken(String token) {
+        return operatorRepository.findOperatorByToken(token);
+    }
 
-    public boolean getOperatorByToken(String token) {
+    public boolean checkTokenValidity(String token) {
         Optional<Operator> operator = operatorRepository.findOperatorByToken(token);
         return operator.isPresent();
     }
