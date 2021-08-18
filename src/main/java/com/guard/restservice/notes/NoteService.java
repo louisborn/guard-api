@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-// Frage Stephan: Zeit und Datum hier berechnen oder in der Applikation?
 @Service
 public class NoteService {
 
@@ -27,8 +26,6 @@ public class NoteService {
         this.noteRepository = noteRepository;
         this.operatorService = operatorService;
     }
-
-
 
     public List<Note> getNotes(String token) {
         if(!operatorService.checkTokenValidity(token)) {
