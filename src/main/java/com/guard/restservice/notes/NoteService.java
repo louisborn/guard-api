@@ -1,11 +1,13 @@
 package com.guard.restservice.notes;
 
 import com.guard.restservice.GService;
+import com.guard.restservice.Operator;
 import com.guard.restservice.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 // Frage Stephan: Zeit und Datum hier berechnen oder in der Applikation?
 @Service
@@ -39,6 +41,8 @@ public class NoteService {
         if(!operatorService.checkTokenValidity(token)) {
             throw new IllegalStateException("Access denied");
         }
+        Optional<Operator> operator = operatorService.getOperatorByToken(token);
+        operator.ifPresent(value -> note.setCreator(value.getName()));
         note.setTime(gService.calculateLocalTime());
         note.setDate(gService.calculateLocalDate());
         noteRepository.save(note);
