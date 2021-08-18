@@ -1,30 +1,47 @@
 package com.guard.restservice.notes;
 
+import com.guard.restservice.GService;
 import com.guard.restservice.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
+// Frage Stephan: Zeit und Datum hier berechnen oder in der Applikation?
 @Service
 public class NoteService {
+
+    private final GService gService;
 
     private final NoteRepository noteRepository;
     private final OperatorService operatorService;
 
     @Autowired
-    public NoteService(NoteRepository noteRepository, OperatorService operatorService) {
+    public NoteService(
+            GService gService,
+            NoteRepository noteRepository,
+            OperatorService operatorService) {
+        this.gService = gService;
         this.noteRepository = noteRepository;
         this.operatorService = operatorService;
     }
+
+
 
     public List<Note> getNotes(String token) {
         if(!operatorService.checkTokenValidity(token)) {
             throw new IllegalStateException("Access denied");
         }
         return noteRepository.findAll();
+    }
+
+    public void addNote(String token, Note note) {
+        if(!operatorService.checkTokenValidity(token)) {
+            throw new IllegalStateException("Access denied");
+        }
+        note.setTime(gService.calculateLocalTime());
+        note.setDate(gService.calculateLocalDate());
+        noteRepository.save(note);
     }
 
     public void deleteNoteById(String token, Long id) {

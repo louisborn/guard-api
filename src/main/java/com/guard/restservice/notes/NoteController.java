@@ -24,6 +24,17 @@ public class NoteController {
         return noteService.getNotes(token);
     }
 
+    @PostMapping(path = "{token}/notes/add")
+    public Map<String, Boolean> addNote(
+            @PathVariable("token") String token,
+            @RequestBody Note note
+    ) {
+        noteService.addNote(token, note);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("added", Boolean.TRUE);
+        return response;
+    }
+
     @DeleteMapping(path = "{token}/notes/delete/{noteId}")
     public Map<String, Boolean> deleteNoteById(
             @PathVariable("token") String token,
