@@ -1,2 +1,7 @@
-package com.guard.restservice.notes;public class NoteService {
+package com.guard.restservice.notes;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class NoteService {
 }
