@@ -1,4 +1,4 @@
-package com.guard.restservice;
+package com.guard.restservice.operator;
 
 import javax.persistence.*;
 

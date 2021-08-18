@@ -1,6 +1,6 @@
 package com.guard.restservice.tasks;
 
-import com.guard.restservice.OperatorService;
+import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

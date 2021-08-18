@@ -2,6 +2,8 @@ package com.guard.restservice;
 
 import com.guard.restservice.notes.Note;
 import com.guard.restservice.notes.NoteRepository;
+import com.guard.restservice.operator.Operator;
+import com.guard.restservice.operator.OperatorRepository;
 import com.guard.restservice.tasks.Task;
 import com.guard.restservice.tasks.TaskRepository;
 import org.springframework.boot.CommandLineRunner;

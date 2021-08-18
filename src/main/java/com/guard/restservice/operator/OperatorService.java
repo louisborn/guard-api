@@ -1,8 +1,7 @@
-package com.guard.restservice;
+package com.guard.restservice.operator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
