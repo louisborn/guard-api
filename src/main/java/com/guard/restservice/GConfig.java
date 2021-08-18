@@ -28,11 +28,12 @@ public class GConfig {
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
                     "John R. Williams", "05:00:45", "2021-09-18", false, true);
 
-            operatorRepository.saveAll(List.of(john));
+            operatorRepository.save(john);
 
-            taskRepository.saveAll(List.of(task1, task2));
+            taskRepository.save(task1);
+            taskRepository.save(task2);
 
-            noteRepository.saveAll(List.of(note1));
+            noteRepository.save(note1);
         };
     }
 }
