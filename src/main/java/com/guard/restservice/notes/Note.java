@@ -15,6 +15,7 @@ public class Note {
     private String creator;
     private String time;
     private String date;
+    private boolean hasUpdate;
     private boolean hasPriority;
 
     public Note() {
@@ -28,6 +29,7 @@ public class Note {
             String creator,
             String time,
             String date,
+            boolean hasUpdate,
             boolean hasPriority) {
         this.id = id;
         this.title = title;
@@ -36,6 +38,7 @@ public class Note {
         this.creator = creator;
         this.time = time;
         this.date = date;
+        this.hasUpdate = hasUpdate;
         this.hasPriority = hasPriority;
     }
 
@@ -46,6 +49,7 @@ public class Note {
             String creator,
             String time,
             String date,
+            boolean hasUpdate,
             boolean hasPriority) {
         this.title = title;
         this.location = location;
@@ -53,6 +57,7 @@ public class Note {
         this.creator = creator;
         this.time = time;
         this.date = date;
+        this.hasUpdate = hasUpdate;
         this.hasPriority = hasPriority;
     }
 
@@ -84,6 +89,8 @@ public class Note {
         return date;
     }
 
+    public boolean getHasUpdate() { return hasUpdate; }
+
     public boolean getHasPriority() {
         return hasPriority;
     }
@@ -111,6 +118,8 @@ public class Note {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public void setHasUpdate(boolean hasUpdate) { this.hasUpdate = hasUpdate; }
 
     public void setHasPriority(boolean hasPriority) {
         this.hasPriority = hasPriority;

@@ -60,13 +60,15 @@ public class NoteService {
         if(!operatorService.checkTokenValidity(token)) {
             throw new IllegalStateException("Access denied");
         }
-        Note note1 = noteRepository.getOne(id);
-        note1.setTitle(note.getTitle());
-        note1.setLocation(note.getLocation());
-        note1.setHasPriority(note.getHasPriority());
-        note1.setDescription(note.getDescription());
-        note1.setCreator(note.getCreator());
-        noteRepository.save(note1);
+        Optional<Operator> operator = operatorService.getOperatorByToken(token);
+        Note updatedNote = noteRepository.getOne(id);
+        updatedNote.setTitle(note.getTitle());
+        updatedNote.setLocation(note.getLocation());
+        updatedNote.setHasPriority(note.getHasPriority());
+        updatedNote.setDescription(note.getDescription());
+        operator.ifPresent(value -> updatedNote.setCreator(value.getName()));
+        updatedNote.setHasUpdate(true);
+        noteRepository.save(updatedNote);
     }
 
 }

@@ -24,7 +24,7 @@ public class GConfig {
                     "Please check B1 thoroughly once. Suspicion of intrusion.", false,true);
 
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
-                    "John R. Williams", "05:00:45", "2021-09-18", true);
+                    "John R. Williams", "05:00:45", "2021-09-18", false, true);
 
             operatorRepository.saveAll(List.of(john));
 
