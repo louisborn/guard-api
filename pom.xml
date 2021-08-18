@@ -14,9 +14,9 @@
 	<name>rest-service</name>
 	<description>Guard api</description>
 	<properties>
-		<java.version>16</java.version>
-		<maven.compiler.target>16</maven.compiler.target>
-		<maven.compiler.source>16</maven.compiler.source>
+		<java.version>16.0.2</java.version>
+		<maven.compiler.target>16.0.2</maven.compiler.target>
+		<maven.compiler.source>16.0.2</maven.compiler.source>
 	</properties>
 
 	<dependencies>
