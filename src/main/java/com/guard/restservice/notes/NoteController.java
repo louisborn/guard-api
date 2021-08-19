@@ -1,5 +1,6 @@
 package com.guard.restservice.notes;
 
+import com.guard.restservice.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,51 +10,70 @@ import java.util.Map;
 
 @RestController
 public class NoteController {
+    /** The response map after a request */
+    private final Map<String, Boolean> response = new HashMap<>();
 
     private final NoteService noteService;
 
+    /** Used to validate the unique operator token
+     *  included in the api requests' header.
+     *  If the token validation fails, the request is denied.
+     */
+    private final TokenService tokenService;
+
     @Autowired
-    public NoteController(NoteService noteService) {
+    public NoteController(
+            NoteService noteService,
+            TokenService tokenService) {
         this.noteService = noteService;
+        this.tokenService = tokenService;
     }
 
-    @GetMapping(path = "{token}/notes")
+    @GetMapping(path = "notes")
     public List<Note> getNotes(
-            @PathVariable("token") String token
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        return noteService.getNotes(token);
-    }
+        tokenService.getResponseStatus(token);
 
-    @PostMapping(path = "{token}/notes/add")
+        return noteService.getNotes();
+     }
+
+    @PostMapping(path = "notes/add")
     public Map<String, Boolean> addNote(
-            @PathVariable("token") String token,
+            @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
+        tokenService.getResponseStatus(token);
+
         noteService.addNote(token, note);
-        Map<String, Boolean> response = new HashMap<>();
+
         response.put("added", Boolean.TRUE);
         return response;
     }
 
-    @DeleteMapping(path = "{token}/notes/delete/{noteId}")
+    @DeleteMapping(path = "notes/delete/{noteId}")
     public Map<String, Boolean> deleteNoteById(
-            @PathVariable("token") String token,
-            @PathVariable("noteId") Long id
+            @PathVariable("noteId") Long id,
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        noteService.deleteNoteById(token, id);
-        Map<String, Boolean> response = new HashMap<>();
+        tokenService.getResponseStatus(token);
+
+        noteService.deleteNoteById(id);
+
         response.put("deleted", Boolean.TRUE);
         return response;
     }
 
-    @PutMapping(path = "{token}/notes/update/{noteId}")
+    @PutMapping(path = "notes/update/{noteId}")
     public Map<String, Boolean> updateNoteById(
-            @PathVariable("token") String token,
             @PathVariable("noteId") Long id,
+            @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
+        tokenService.getResponseStatus(token);
+
         noteService.updateNoteById(token, id, note);
-        Map<String, Boolean> response = new HashMap<>();
+
         response.put("updated", Boolean.TRUE);
         return response;
     }
