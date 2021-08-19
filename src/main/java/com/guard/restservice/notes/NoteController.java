@@ -72,7 +72,7 @@ public class NoteController {
     ) {
         tokenService.getResponseStatus(token);
 
-        noteService.updateNoteById(token, id, note);
+        noteService.updateNoteById(id, note);
 
         response.put("updated", Boolean.TRUE);
         return response;
