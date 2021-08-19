@@ -21,6 +21,10 @@ public class OperatorService {
         return operatorRepository.findAll();
     }
 
+    public Optional<Operator> getOperatorByDeviceId(String deviceId) {
+        return operatorRepository.findOperatorByDeviceId(deviceId);
+    }
+
     public Optional<Operator> getOperatorByToken(String token) {
         return operatorRepository.findOperatorByToken(token);
     }

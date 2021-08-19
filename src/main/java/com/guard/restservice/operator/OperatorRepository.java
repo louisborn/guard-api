@@ -10,6 +10,9 @@ import java.util.Optional;
 @Repository
 public interface OperatorRepository extends JpaRepository<Operator, Long> {
 
+    @Query("SELECT o FROM Operator o WHERE o.deviceId=?1")
+    Optional<Operator> findOperatorByDeviceId(String deviceId);
+
     @Query("SELECT o FROM Operator o WHERE o.token=?1")
     Optional<Operator> findOperatorByToken(String token);
 
