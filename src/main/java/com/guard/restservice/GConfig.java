@@ -18,7 +18,7 @@ public class GConfig {
     @Bean
     CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository) {
         return args -> {
-            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "");
+            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "","", "");
 
             Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
                     "Please check B1 thoroughly once. Suspicion of intrusion.", true,true);
