@@ -1,71 +1,79 @@
 package com.guard.restservice.notes;
 
-import com.guard.restservice.GService;
+import com.guard.restservice.GlobalService;
 import com.guard.restservice.operator.Operator;
 import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class NoteService {
+    /** Used to calculate the current local time and date. */
+    private final GlobalService globalService;
 
-    private final GService gService;
-
+    /** Instance for database communication. */
     private final NoteRepository noteRepository;
+
     private final OperatorService operatorService;
 
     @Autowired
     public NoteService(
-            GService gService,
+            GlobalService globalService,
             NoteRepository noteRepository,
             OperatorService operatorService) {
-        this.gService = gService;
+        this.globalService = globalService;
         this.noteRepository = noteRepository;
         this.operatorService = operatorService;
     }
 
-    public List<Note> getNotes(String token) {
-        if(!operatorService.checkTokenValidity(token)) {
-            throw new IllegalStateException("Access denied");
+    public List<Note> getNotes() {
+        try {
+            return noteRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        return noteRepository.findAll();
     }
 
     public void addNote(String token, Note note) {
-        if(!operatorService.checkTokenValidity(token)) {
-            throw new IllegalStateException("Access denied");
+        try {
+            Optional<Operator> operator = operatorService.getOperatorByToken(token);
+
+            operator.ifPresent(value -> note.setCreator(value.getName()));
+            note.setTime(globalService.calculateLocalTime());
+            note.setDate(globalService.calculateLocalDate());
+
+            noteRepository.save(note);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        Optional<Operator> operator = operatorService.getOperatorByToken(token);
-        operator.ifPresent(value -> note.setCreator(value.getName()));
-        note.setTime(gService.calculateLocalTime());
-        note.setDate(gService.calculateLocalDate());
-        noteRepository.save(note);
     }
 
-    public void deleteNoteById(String token, Long id) {
-        if(!operatorService.checkTokenValidity(token)) {
-            throw new IllegalStateException("Access denied");
+    public void deleteNoteById(Long id) {
+        try {
+            noteRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        noteRepository.deleteById(id);
     }
 
-    // Frage Stephan: Drei Parameter problematisch?
-    public void updateNoteById(String token, Long id, Note note) {
-        if(!operatorService.checkTokenValidity(token)) {
-            throw new IllegalStateException("Access denied");
-        }
-        Optional<Operator> operator = operatorService.getOperatorByToken(token);
-        Note updatedNote = noteRepository.getOne(id);
-        updatedNote.setTitle(note.getTitle());
-        updatedNote.setLocation(note.getLocation());
-        updatedNote.setHasPriority(note.getHasPriority());
-        updatedNote.setDescription(note.getDescription());
-        operator.ifPresent(value -> updatedNote.setCreator(value.getName()));
-        updatedNote.setHasUpdate(true);
-        noteRepository.save(updatedNote);
-    }
+    public void updateNoteById(Long id, Note note) {
+        try {
+            Note updatedNote = noteRepository.getOne(id);
 
+            updatedNote.setTitle(note.getTitle());
+            updatedNote.setLocation(note.getLocation());
+            updatedNote.setHasPriority(note.getHasPriority());
+            updatedNote.setDescription(note.getDescription());
+            updatedNote.setHasUpdate(true);
+
+            noteRepository.save(updatedNote);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+    }
 }
