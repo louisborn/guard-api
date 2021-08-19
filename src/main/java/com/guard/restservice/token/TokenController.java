@@ -38,6 +38,7 @@ public class AuthenticationController {
                 break;
             case REGISTRATION:
                 response.put("status", "REGISTRATION");
+                response.put("token", authenticationService.getToken());
                 break;
         }
         return response;
