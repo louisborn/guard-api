@@ -1,80 +1,70 @@
-package com.guard.restservice.authentication;
+package com.guard.restservice.token;
 
 import com.guard.restservice.operator.Operator;
 import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.Optional;
 
-enum TokenStatus {
-    INVALID,
-    EXPIRED,
-    VALID,
-    REGISTRATION,
-}
-
 @Service
-public class AuthenticationService {
+public class TokenService {
+
+    private String token;
+    private String deviceId;
+    private String applicationId;
+    private String operatorEmail;
+
+    private TokenStatus tokenStatus;
 
     private final OperatorService operatorService;
 
-    private String token;
-    private TokenStatus tokenStatus;
+    @Autowired
+    public TokenService(OperatorService operatorService) {
+        this.operatorService = operatorService;
+    }
 
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public TokenStatus getTokenStatus() {
         return tokenStatus;
     }
 
-    public void setTokenStatus(TokenStatus tokenStatus) {
-        this.tokenStatus = tokenStatus;
-    }
-
-    private String deviceId;
-    private String applicationId;
-    private String operatorEmail;
-
-    @Autowired
-    public AuthenticationService(OperatorService operatorService) {
-        this.operatorService = operatorService;
-    }
-
     public void validateHandshake(String deviceId, String token, String applicationId) {
-        if(deviceId.isEmpty()) {
-            tokenStatus = TokenStatus.INVALID;
-            return;
+        try {
+            if(deviceId.isEmpty()) {
+                tokenStatus = TokenStatus.INVALID;
+                return;
+            }
+            Optional<Operator> operator = operatorService.getOperatorByDeviceId(deviceId);
+            if(!operator.isPresent()) {
+                tokenStatus = TokenStatus.LOGIN;
+                return;
+            }
+            if(applicationId.isEmpty() || !applicationId.equals(operator.get().getApplicationId())) {
+                tokenStatus = TokenStatus.INVALID;
+                return;
+            }
+            this.deviceId = deviceId;
+            this.applicationId = applicationId;
+            this.operatorEmail = operator.get().getEmail();
+            if(token.isEmpty()) {
+                generateToken();
+                tokenStatus = TokenStatus.NEW;
+                return;
+            }
+            validateToken(token);
+        } catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        Optional<Operator> operator = operatorService.getOperatorByDeviceId(deviceId);
-        if(!operator.isPresent()) {
-            tokenStatus = TokenStatus.REGISTRATION;
-            return;
-        }
-        if(applicationId.isEmpty() || !applicationId.equals(operator.get().getApplicationId())) {
-            tokenStatus = TokenStatus.INVALID;
-            return;
-        }
-        this.deviceId = deviceId;
-        this.applicationId = applicationId;
-        this.operatorEmail = operator.get().getEmail();
-        if(token.isEmpty()) {
-            generateToken();
-            tokenStatus = TokenStatus.REGISTRATION;
-            return;
-        }
-        validateToken(token);
     }
 
     public void validateToken(String token) {
@@ -83,6 +73,17 @@ public class AuthenticationService {
             String decrypted = new String(bytes);
 
             String[] parts = decrypted.split("~", -2);
+
+            if(deviceId == null || applicationId == null || operatorEmail == null) {
+                Optional<Operator> operator = operatorService.getOperatorByEmail(parts[2]);
+                if(!operator.isPresent()) {
+                    tokenStatus = TokenStatus.LOGIN;
+                    return;
+                }
+                deviceId = operator.get().getDeviceId();
+                applicationId = operator.get().getApplicationId();
+                operatorEmail = operator.get().getEmail();
+            }
 
             if(!deviceId.equals(parts[0])) {
                 tokenStatus = TokenStatus.INVALID;
@@ -98,17 +99,32 @@ public class AuthenticationService {
             }
             tokenStatus = TokenStatus.VALID;
         } catch (Exception e) {
-            System.out.println(e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
     }
 
     public void generateToken() {
-        LocalDate expirationDate = LocalDate.now();
+        try {
+            LocalDate expirationDate = LocalDate.now();
 
-        //{deviceId}~{applicationId}~{operatorEmail}~{expirationDate}
-        String tokenInClear = deviceId + "~" + applicationId + "~" + operatorEmail + "~" + expirationDate;
+            //{deviceId}~{applicationId}~{operatorEmail}~{expirationDate}
+            String tokenInClear = deviceId + "~" + applicationId + "~" + operatorEmail + "~" + expirationDate;
 
-        setToken(Base64.getEncoder().encodeToString(tokenInClear.getBytes(StandardCharsets.UTF_8)));
-        System.out.println(token);
+            token = Base64.getEncoder().encodeToString(tokenInClear.getBytes(StandardCharsets.UTF_8));
+            System.out.println(token);
+        } catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+    }
+
+    public void validateTokenAtRequest(String token) {
+        try {
+            validateToken(token);
+            if(getTokenStatus() == TokenStatus.INVALID) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 }
