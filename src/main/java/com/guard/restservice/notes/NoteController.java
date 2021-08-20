@@ -33,7 +33,7 @@ public class NoteController {
     public List<Note> getNotes(
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.getResponseStatus(token);
+        tokenService.validateTokenAtRequest(token);
 
         return noteService.getNotes();
      }
@@ -43,7 +43,7 @@ public class NoteController {
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
-        tokenService.getResponseStatus(token);
+        tokenService.validateTokenAtRequest(token);
 
         noteService.addNote(token, note);
 
@@ -56,7 +56,7 @@ public class NoteController {
             @PathVariable("noteId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.getResponseStatus(token);
+        tokenService.validateTokenAtRequest(token);
 
         noteService.deleteNoteById(id);
 
@@ -70,7 +70,7 @@ public class NoteController {
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
-        tokenService.getResponseStatus(token);
+        tokenService.validateTokenAtRequest(token);
 
         noteService.updateNoteById(id, note);
 
