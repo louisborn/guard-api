@@ -9,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class TokenService {
             }
             Optional<Operator> operator = operatorService.getOperatorByDeviceId(deviceId);
             if(!operator.isPresent()) {
-                tokenStatus = TokenStatus.LOGIN;
+                tokenStatus = TokenStatus.LOGIN_REQUIRED;
                 return;
             }
             if(applicationId.isEmpty() || !applicationId.equals(operator.get().getApplicationId())) {
@@ -63,7 +62,7 @@ public class TokenService {
             }
             validateToken(token);
         } catch(Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,7 +76,7 @@ public class TokenService {
             if(deviceId == null || applicationId == null || operatorEmail == null) {
                 Optional<Operator> operator = operatorService.getOperatorByEmail(parts[2]);
                 if(!operator.isPresent()) {
-                    tokenStatus = TokenStatus.LOGIN;
+                    tokenStatus = TokenStatus.LOGIN_REQUIRED;
                     return;
                 }
                 deviceId = operator.get().getDeviceId();
@@ -99,7 +98,7 @@ public class TokenService {
             }
             tokenStatus = TokenStatus.VALID;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -113,7 +112,7 @@ public class TokenService {
             token = Base64.getEncoder().encodeToString(tokenInClear.getBytes(StandardCharsets.UTF_8));
             System.out.println(token);
         } catch(Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,10 +120,10 @@ public class TokenService {
         try {
             validateToken(token);
             if(getTokenStatus() == TokenStatus.INVALID) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
