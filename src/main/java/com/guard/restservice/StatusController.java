@@ -34,15 +34,15 @@ public class StatusController implements ErrorController {
                 return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
             }
             else if (statusCode == HttpStatus.FORBIDDEN.value()) {
-                body.put("status", "FORBIDDEN");
-                return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+                body.put("status", "UNAUTHORIZED");
+                return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
             }
             else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 body.put("status", "INTERNAL_SERVER_ERROR");
                 return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        body.put("status", "SOME ERROR OCCURRED");
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        body.put("status", "BAD_REQUEST");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
