@@ -1,5 +1,6 @@
 package com.guard.restservice.tasks;
 
+import com.guard.restservice.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,62 +10,76 @@ import java.util.Map;
 
 @RestController
 public class TaskController {
+    /** The response map after a request */
+    private final Map<String, Boolean> response = new HashMap<>();
 
     private final TaskService taskService;
 
+    /** Used to validate the unique operator token
+     *  included in the api requests' header.
+     *  If the token validation fails, the request is denied.
+     */
+    private final TokenService tokenService;
+
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, TokenService tokenService) {
         this.taskService = taskService;
+        this.tokenService = tokenService;
     }
 
-    // Returns all available tasks. Independent of the operator id.
-    @GetMapping(path = "{token}/tasks")
+    @GetMapping(path = "tasks")
     public List<Task> getTasks(
-            @PathVariable("token") String token
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        return taskService.getTasks(token);
+        tokenService.validateTokenAtRequest(token);
+
+        return taskService.getTasks();
     }
 
-    // Returns only the tasks assigned to the operator id.
-    @GetMapping(path = "{token}/tasks/{operatorId}")
+    @GetMapping(path = "tasks/{operatorId}")
     public List<Task> getTasksByOperatorId(
-            @PathVariable("token") String token,
-            @PathVariable("operatorId") Long id
+            @PathVariable("operatorId") Long id,
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        return taskService.getTasksByOperatorId(token, id);
+        tokenService.validateTokenAtRequest(token);
+
+        return taskService.getTasksByOperatorId(id);
     }
 
-    // Deletes a single task by its id.
-    @DeleteMapping(path = "{token}/tasks/delete/{taskId}")
+    @DeleteMapping(path = "tasks/delete/{taskId}")
     public Map<String, Boolean> deleteTaskById(
-            @PathVariable("token") String token,
-            @PathVariable("taskId") Long id
+            @PathVariable("taskId") Long id,
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        taskService.deleteTaskById(token, id);
-        Map<String, Boolean> response = new HashMap<>();
+        tokenService.validateTokenAtRequest(token);
+
+        taskService.deleteTaskById(id);
+
         response.put("deleted", Boolean.TRUE);
         return response;
     }
 
-    // Deletes all completed tasks.
-    @DeleteMapping(path = "{token}/tasks/delete")
+    @DeleteMapping(path = "tasks/delete")
     public Map<String, Boolean> deleteAllCompletedTasks(
-            @PathVariable("token") String token
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        taskService.deleteAllCompletedTasks(token);
-        Map<String, Boolean> response = new HashMap<>();
+        tokenService.validateTokenAtRequest(token);
+
+        taskService.deleteAllCompletedTasks();
+
         response.put("deleted", Boolean.TRUE);
         return response;
     }
 
-    // Toggles the task completion status. Initial state: false.
-    @PutMapping(path = "{token}/tasks/{taskId}/update")
+    @PutMapping(path = "tasks/{taskId}/update")
     public Map<String, Boolean> updateTaskStatus(
-            @PathVariable("token") String token,
-            @PathVariable("taskId") long id
+            @PathVariable("taskId") long id,
+            @RequestHeader(name = "X-TOKEN") String token
     ) {
-        taskService.updateTaskStatus(token, id);
-        Map<String, Boolean> response = new HashMap<>();
+        tokenService.validateTokenAtRequest(token);
+
+        taskService.updateTaskStatus(id);
+
         response.put("updated", Boolean.TRUE);
         return response;
     }
