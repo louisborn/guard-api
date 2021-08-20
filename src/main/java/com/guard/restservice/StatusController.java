@@ -42,8 +42,7 @@ public class StatusController implements ErrorController {
                 return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        body.put("status", "UNKNOWN_ERROR");
+        body.put("status", "SOME ERROR OCCURRED");
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
-        //return new ModelAndView("error/error");
     }
 }
