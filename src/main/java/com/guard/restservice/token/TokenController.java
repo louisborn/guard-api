@@ -1,4 +1,4 @@
-package com.guard.restservice.authentication;
+package com.guard.restservice.token;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class AuthenticationController {
+public class TokenController {
 
-    private final AuthenticationService authenticationService;
+    private final TokenService tokenService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public TokenController(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @GetMapping(path = "handshake")
@@ -24,9 +24,9 @@ public class AuthenticationController {
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestHeader(name = "X-APP-ID") String applicationId
     ) {
-        authenticationService.validateHandshake(deviceId, token, applicationId);
+        tokenService.validateHandshake(deviceId, token, applicationId);
         Map<String, String> response = new HashMap<>();
-        switch (authenticationService.getTokenStatus()) {
+        switch (tokenService.getTokenStatus()) {
             case VALID:
                 response.put("status", "VALID");
                 break;
@@ -36,9 +36,12 @@ public class AuthenticationController {
             case EXPIRED:
                 response.put("status", "EXPIRED");
                 break;
-            case REGISTRATION:
-                response.put("status", "REGISTRATION");
-                response.put("token", authenticationService.getToken());
+            case LOGIN_REQUIRED:
+                response.put("status", "LOGIN_REQUIRED");
+                break;
+            case NEW:
+                response.put("status", "NEW");
+                response.put("token", tokenService.getToken());
                 break;
         }
         return response;
