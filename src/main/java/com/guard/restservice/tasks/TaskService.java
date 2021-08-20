@@ -1,8 +1,9 @@
 package com.guard.restservice.tasks;
 
-import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -12,66 +13,69 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final OperatorService operatorService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, OperatorService operatorService) {
+    public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.operatorService = operatorService;
     }
 
-    public List<Task> getTasks(String token) {
-        if(!operatorService.checkTokenValidity(token)){
-            throw new IllegalStateException("Access denied");
-        }
-        return taskRepository.findAll();
-    }
-
-    public Optional<Task> getTaskById(String token, long taskId) {
-        if(!operatorService.checkTokenValidity(token)){
-            throw new IllegalStateException("Access denied");
-        }
-        return taskRepository.findById(taskId);
-    }
-
-    public List<Task> getTasksByOperatorId(String token, long operatorId) {
-        if(!operatorService.checkTokenValidity(token)){
-            throw new IllegalStateException("Access denied");
-        }
-        return taskRepository.findTaskByOperatorId(operatorId);
-    }
-
-    public void deleteTaskById(String token, Long taskId) {
-        if(!operatorService.checkTokenValidity(token)){
-            throw new IllegalStateException("Access denied");
-        }
-        boolean exists = taskRepository.existsById(taskId);
-        if(!exists){
-            throw new IllegalStateException("Access denied");
-        }
-        taskRepository.deleteById(taskId);
-    }
-
-    @Transactional
-    public void deleteAllCompletedTasks(String token) {
-        if(!operatorService.checkTokenValidity(token)){
-            throw new IllegalStateException("Access denied");
-        }
-        taskRepository.deleteAllCompletedTasks();
-    }
-
-    @Transactional
-    public void updateTaskStatus(String token, long id) {
+    public List<Task> getTasks() {
         try {
-            Optional<Task> task = getTaskById(token, id);
+            return taskRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public Optional<Task> getTaskById(long taskId) {
+        try {
+            return taskRepository.findById(taskId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public List<Task> getTasksByOperatorId(long operatorId) {
+        try {
+            return taskRepository.findTaskByOperatorId(operatorId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public void deleteAllCompletedTasks() {
+        try {
+            taskRepository.deleteAllCompletedTasks();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void deleteTaskById(Long taskId) {
+        try {
+            boolean exists = taskRepository.existsById(taskId);
+            if(!exists){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            taskRepository.deleteById(taskId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public void updateTaskStatus(long id) {
+        try {
+            Optional<Task> task = getTaskById(id);
             if(!task.isPresent()) {
-                throw new IllegalStateException("Could not update operator");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             Task task1 = task.get();
             task1.setIsCompleted(!task.get().getIsCompleted());
             taskRepository.save(task1);
         } catch(Exception e) {
-            throw new IllegalStateException("Could not update task status");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
