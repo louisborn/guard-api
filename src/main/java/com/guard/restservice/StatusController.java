@@ -33,7 +33,7 @@ public class StatusController implements ErrorController {
                 body.put("status", "NOT_FOUND");
                 return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
             }
-            else if (statusCode == HttpStatus.FORBIDDEN.value()) {
+            else if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
                 body.put("status", "UNAUTHORIZED");
                 return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
             }
