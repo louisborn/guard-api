@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-@Service
-public class GService {
+@org.springframework.stereotype.Service
+public class LocalCalculation {
 
     public String calculateLocalTime() {
         LocalTime localTime = LocalTime.now();
