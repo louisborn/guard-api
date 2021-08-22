@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
-public class GConfig {
+@org.springframework.context.annotation.Configuration
+public class Configuration {
 
     @Bean
     CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository) {
         return args -> {
-            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "","", "");
+            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "example-device-id","ZXhhbXBsZS1kZXZpY2UtaWR+ZXhhbXBsZS1hcHAtaWR+am9obi53aWxsaWFtc0Bib3NjaC5kZX4yMDIxLTA4LTIw", "example-app-id");
 
             Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
                     "Please check B1 thoroughly once. Suspicion of intrusion.", true,true);
