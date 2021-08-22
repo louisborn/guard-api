@@ -2,22 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login as employee</title>
+    <title>Guard Registration</title>
 </head>
 <body>
-<h2>Employee Registration</h2>
-<form th:action="@{/profile}" th:object="${operator}" method="post">
     <div align="center">
-        <div>
-            <label>Email</label>
-            <input type="email" th:field="*{email}">
-        </div>
-        <div>
-            <label>Password</label>
-            <input type="password" th:field="*{password}">
-        </div>
-        <button type="submit">Save</button>
+        <h2>Employee Registration</h2>
+        <form th:action="@{authenticated}" th:object="${operator}" th:method="post">
+            <div style="margin-bottom: 1em">
+                <label>Email:</label><br>
+                <input type="email" th:field="*{email}">
+            </div>
+            <div style="margin-top: 1em; margin-bottom: 1em">
+                <label>Password:</label><br>
+                <input type="password" th:field="*{password}">
+            </div>
+            <button type="submit">Register</button>
+        </form>
     </div>
-</form>
 </body>
 </html>
