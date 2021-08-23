@@ -1,20 +1,19 @@
 package com.guard.restservice.notes;
 
-import com.guard.restservice.GlobalService;
+import com.guard.restservice.LocalCalculation;
 import com.guard.restservice.operator.Operator;
 import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@org.springframework.stereotype.Service
 public class NoteService {
     /** Used to calculate the current local time and date. */
-    private final GlobalService globalService;
+    private final LocalCalculation globalService;
 
     /** Instance for database communication. */
     private final NoteRepository noteRepository;
@@ -23,7 +22,7 @@ public class NoteService {
 
     @Autowired
     public NoteService(
-            GlobalService globalService,
+            LocalCalculation globalService,
             NoteRepository noteRepository,
             OperatorService operatorService) {
         this.globalService = globalService;

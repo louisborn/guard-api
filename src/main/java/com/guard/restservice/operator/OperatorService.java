@@ -1,7 +1,9 @@
 package com.guard.restservice.operator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +12,69 @@ import java.util.*;
 @Service
 public class OperatorService {
 
+    private String deviceId;
+    private String applicationId;
+
     private final OperatorRepository operatorRepository;
 
     @Autowired
     public OperatorService(OperatorRepository operatorRepository) {
+
         this.operatorRepository = operatorRepository;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void registration(String email, String password) {
+        try {
+            Optional<Operator> operator = validateCredentials(email, password);
+            saveDeviceIdAndApplicationId(operator);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public Optional<Operator> validateCredentials(String email, String password) {
+        try {
+            Optional<Operator> operator = operatorRepository.findOperatorByEmail(email);
+            if (!operator.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            if(!Objects.equals(operator.get().getPassword(), password)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+            return operator;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    public void saveDeviceIdAndApplicationId(Optional<Operator> operator) {
+        try {
+            if(!operator.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            Operator operator1 = operator.get();
+
+            if(this.deviceId.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+            if(this.applicationId.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+            operator1.setDeviceId(this.deviceId);
+            operator1.setApplicationId(this.applicationId);
+            operatorRepository.save(operator1);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public List<Operator> getOperators() {
@@ -25,57 +85,11 @@ public class OperatorService {
         return operatorRepository.findOperatorByDeviceId(deviceId);
     }
 
+    public Optional<Operator> getOperatorByEmail(String email) {
+        return operatorRepository.findOperatorByEmail(email);
+    }
+
     public Optional<Operator> getOperatorByToken(String token) {
         return operatorRepository.findOperatorByToken(token);
-    }
-
-    public boolean checkTokenValidity(String token) {
-        Optional<Operator> operator = operatorRepository.findOperatorByToken(token);
-        return operator.isPresent();
-    }
-
-    public List<String> startOperatorLogin(String email, String password) {
-        Optional<Operator> operator = validateOperatorInput(email, password);
-        if(!operator.isPresent()) {
-            throw new IllegalStateException("Could not start operator login");
-        }
-        String token = createOperatorToken(email);
-        boolean isLoginSuccessful = updateOperatorToken(token, operator);
-        if(!isLoginSuccessful) {
-            throw new IllegalStateException("Operator login failed");
-        }
-        //For debugging only
-        List<String> result = new ArrayList<>();
-        result.add(operator.get().getEmail());
-        result.add(operator.get().getPassword());
-        result.add(operator.get().getToken());
-
-        return result;
-    }
-
-    public Optional<Operator> validateOperatorInput(String email, String password) {
-        Optional<Operator> operator = operatorRepository.findOperatorByEmail(email);
-        if (!operator.isPresent()) {
-            throw new IllegalStateException("Operator not found");
-        }
-        if(!Objects.equals(operator.get().getPassword(), password)) {
-            throw new IllegalStateException("Wrong password");
-        }
-        return operator;
-    }
-
-    public String createOperatorToken(String email) {
-        return Base64.getEncoder().encodeToString(email.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @Transactional
-    public boolean updateOperatorToken(String token, Optional<Operator> operator) {
-        if(!operator.isPresent()) {
-            throw new IllegalStateException("Could not update operator");
-        }
-        Operator operator1 = operator.get();
-        operator1.setToken(token);
-        operatorRepository.save(operator1);
-        return true;
     }
 }
