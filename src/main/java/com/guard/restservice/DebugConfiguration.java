@@ -18,7 +18,7 @@ public class DebugConfiguration {
     @Bean
     CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository) {
         return args -> {
-            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "example-device-id","ZXhhbXBsZS1kZXZpY2UtaWR+ZXhhbXBsZS1hcHAtaWR+am9obi53aWxsaWFtc0Bib3NjaC5kZX4yMDIxLTA4LTIw", "example-app-id");
+            Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "bramble-RQ3A.210805.001.A1","ZXhhbXBsZS1kZXZpY2UtaWR+ZXhhbXBsZS1hcHAtaWR+am9obi53aWxsaWFtc0Bib3NjaC5kZX4yMDIxLTA4LTIw", "example-app-id");
 
             Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
                     "Please check B1 thoroughly once. Suspicion of intrusion.", true,true);
