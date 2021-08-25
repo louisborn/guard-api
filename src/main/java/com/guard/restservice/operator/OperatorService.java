@@ -31,10 +31,11 @@ public class OperatorService {
         this.applicationId = applicationId;
     }
 
-    public void registration(String email, String password) {
+    public boolean registration(String email, String password) {
         try {
             Optional<Operator> operator = validateCredentials(email, password);
             saveDeviceIdAndApplicationId(operator);
+            return true;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

@@ -45,7 +45,7 @@ public class OperatorController {
         return new ModelAndView("registration");
     }
 
-    @GetMapping(path = "/redirectToGet")
+    @GetMapping(path = "/registration_success")
     ModelAndView redirect() {
         return new ModelAndView("authenticated");
     }
@@ -55,9 +55,10 @@ public class OperatorController {
             @RequestParam("email") String email,
             @RequestParam("password") String password
     ) {
-        operatorService.registration(email, password);
-
-        return new ModelAndView("redirect:/redirectToGet");
+        if(operatorService.registration(email, password)) {
+            return new ModelAndView("redirect:/registration_success");
+        }
+        return new ModelAndView("registration");
     }
 
 }
