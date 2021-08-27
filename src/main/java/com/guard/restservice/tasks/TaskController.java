@@ -41,7 +41,7 @@ public class TaskController {
             @PathVariable("operatorId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
+        //tokenService.validateTokenAtRequest(token);
 
         return taskService.getTasksByOperatorId(id);
     }

@@ -73,7 +73,7 @@ public class TokenService {
 
             String[] parts = decrypted.split("~", -2);
 
-            if(deviceId == null || applicationId == null || operatorEmail == null) {
+            if(deviceId.isEmpty() || applicationId.isEmpty() || operatorEmail.isEmpty()) {
                 Optional<Operator> operator = operatorService.getOperatorByEmail(parts[2]);
                 if(!operator.isPresent()) {
                     tokenStatus = TokenStatus.LOGIN_REQUIRED;
@@ -118,12 +118,29 @@ public class TokenService {
 
     public void validateTokenAtRequest(String token) {
         try {
-            validateToken(token);
-            if(getTokenStatus() == TokenStatus.INVALID) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            byte[] bytes = Base64.getDecoder().decode(token);
+            String decrypted = new String(bytes);
+
+            String[] parts = decrypted.split("~", -2);
+
+            Optional<Operator> operator = operatorService.getOperatorByDeviceId(parts[0]);
+            if(!operator.isPresent()) {
+                tokenStatus = TokenStatus.LOGIN_REQUIRED;
+                return;
             }
+
+            if(!operator.get().getApplicationId().equals(parts[1])) {
+                tokenStatus = TokenStatus.INVALID;
+                return;
+            }
+            if(!operator.get().getEmail().equals(parts[2])) {
+                tokenStatus = TokenStatus.INVALID;
+                return;
+            }
+            tokenStatus = TokenStatus.VALID;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
