@@ -22,8 +22,10 @@ public class DebugConfiguration {
 
             Task task1 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
                     "Please check B1 thoroughly once. Suspicion of intrusion.", true,true);
-            Task task2 = new Task(1, "Check B1" ,"Building B, ground floor", "10:32:22","2021-09-18",
-                    "Please check B1 thoroughly once. Suspicion of intrusion.", false,true);
+            Task task2 = new Task(1, "Patrol ground floor at 9:00am" ,"Building C, ground floor", "06:45:22","2021-09-18",
+                    "-", false,false);
+            Task task3 = new Task(1, "Support patrol at 9:30am" ,"B1, garage", "06:50:32","2021-09-18",
+                    "Support Johnson at patrol as it is his first day.", false,false);
 
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
                     "John R. Williams", "05:00:45", "2021-09-18", false, true);
@@ -32,6 +34,7 @@ public class DebugConfiguration {
 
             taskRepository.save(task1);
             taskRepository.save(task2);
+            taskRepository.save(task3);
 
             noteRepository.save(note1);
         };
