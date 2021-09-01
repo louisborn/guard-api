@@ -51,7 +51,7 @@ public class TaskController {
             @PathVariable("taskId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
+        //tokenService.validateTokenAtRequest(token);
 
         taskService.deleteTaskById(id);
 
@@ -63,7 +63,7 @@ public class TaskController {
     public Map<String, Boolean> deleteAllCompletedTasks(
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
+        //tokenService.validateTokenAtRequest(token);
 
         taskService.deleteAllCompletedTasks();
 
@@ -76,7 +76,7 @@ public class TaskController {
             @PathVariable("taskId") long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
+        //tokenService.validateTokenAtRequest(token);
 
         taskService.updateTaskStatus(id);
 
