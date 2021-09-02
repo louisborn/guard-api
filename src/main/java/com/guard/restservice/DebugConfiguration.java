@@ -41,6 +41,9 @@ public class DebugConfiguration {
             taskRepository.save(task1);
             taskRepository.save(task2);
             taskRepository.save(task3);
+            taskRepository.save(task4);
+            taskRepository.save(task5);
+            taskRepository.save(task6);
 
             noteRepository.save(note1);
         };
