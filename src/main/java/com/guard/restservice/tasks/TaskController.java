@@ -46,7 +46,7 @@ public class TaskController {
         return taskService.getTasksByOperatorId(id);
     }
 
-    @DeleteMapping(path = "tasks/delete/{taskId}")
+    @DeleteMapping(path = "tasks/{taskId}/delete")
     public Map<String, Boolean> deleteTaskById(
             @PathVariable("taskId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
