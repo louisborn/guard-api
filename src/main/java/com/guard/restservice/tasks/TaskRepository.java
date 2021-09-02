@@ -14,6 +14,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findTaskByOperatorId(long operatorId);
 
     @Modifying
-    @Query("DELETE FROM Task t WHERE t.isCompleted=true")
-    void deleteAllCompletedTasks();
+    @Query("DELETE FROM Task t WHERE t.isCompleted=true AND t.operatorId=?1")
+    void deleteAllCompletedTasks(long id);
 }

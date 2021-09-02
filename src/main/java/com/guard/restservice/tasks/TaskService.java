@@ -44,9 +44,9 @@ public class TaskService {
     }
 
     @Transactional
-    public void deleteAllCompletedTasks() {
+    public void deleteAllCompletedTasks(Long id) {
         try {
-            taskRepository.deleteAllCompletedTasks();
+            taskRepository.deleteAllCompletedTasks(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
