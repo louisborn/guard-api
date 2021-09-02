@@ -26,6 +26,12 @@ public class DebugConfiguration {
                     "-", false,false);
             Task task3 = new Task(1, "Support patrol at 9:30am" ,"B1, garage", "06:50:32","2021-09-18",
                     "Support Johnson at patrol as it is his first day.", false,false);
+            Task task4 = new Task(1, "Test task no.: 4" ,"A2, top floor", "06:50:32","2021-09-18",
+                    "Default description for test task", false,false);
+            Task task5 = new Task(1, "Test task no.: 5" ,"A5, garage", "06:50:32","2021-09-18",
+                    "Default description for test task", false,true);
+            Task task6 = new Task(1, "Test task no.: 6" ,"C1, second floor, Room 5", "06:50:32","2021-09-18",
+                    "Default description for test ask", false,false);
 
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
                     "John R. Williams", "05:00:45", "2021-09-18", false, true);

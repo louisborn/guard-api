@@ -1,5 +1,7 @@
 package com.guard.restservice.tasks;
 
+import com.guard.restservice.operator.Operator;
+import com.guard.restservice.operator.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final OperatorService operatorService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, OperatorService operatorService) {
         this.taskRepository = taskRepository;
+        this.operatorService = operatorService;
     }
 
     public List<Task> getTasks() {
@@ -44,9 +48,13 @@ public class TaskService {
     }
 
     @Transactional
-    public void deleteAllCompletedTasks(Long id) {
+    public void deleteAllCompletedTasks(String token) {
         try {
-            taskRepository.deleteAllCompletedTasks(id);
+            Optional<Operator> operator = operatorService.getOperatorByToken(token);
+            if(operator.isPresent()) {
+                long id = operator.get().getId();
+                taskRepository.deleteAllCompletedTasks(id);
+            }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }

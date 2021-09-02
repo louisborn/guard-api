@@ -59,14 +59,13 @@ public class TaskController {
         return response;
     }
 
-    @DeleteMapping(path = "tasks/delete/{operatorId}")
+    @DeleteMapping(path = "tasks/delete")
     public Map<String, Boolean> deleteAllCompletedTasks(
-            @PathVariable("operatorId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
         //tokenService.validateTokenAtRequest(token);
 
-        taskService.deleteAllCompletedTasks(id);
+        taskService.deleteAllCompletedTasks(token);
 
         response.put("deleted", Boolean.TRUE);
         return response;
