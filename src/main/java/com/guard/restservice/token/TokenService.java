@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
@@ -98,6 +99,11 @@ public class TokenService {
                 return;
             }
             if(!operatorEmail.equals(parts[2])) {
+                tokenStatus = TokenStatus.INVALID;
+                return;
+            }
+            String expirationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MMM-dd"));
+            if(!expirationDate.equals(parts[3])) {
                 tokenStatus = TokenStatus.INVALID;
                 return;
             }
