@@ -103,7 +103,7 @@ public class TokenService {
                 tokenStatus = TokenStatus.INVALID;
                 return;
             }
-            String expirationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MMM-dd"));
+            String expirationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             if(!expirationDate.equals(parts[3])) {
                 tokenStatus = TokenStatus.INVALID;
                 return;
