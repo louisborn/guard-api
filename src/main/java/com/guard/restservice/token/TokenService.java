@@ -63,6 +63,7 @@ public class TokenService {
             this.operatorEmail = operator.get().getEmail();
             if(Objects.equals(token, "")) {
                 generateToken();
+                operatorService.saveOperatorToken(operator, this.token);
                 tokenStatus = TokenStatus.NEW;
                 return;
             }
@@ -121,7 +122,6 @@ public class TokenService {
             String tokenInClear = deviceId + "~" + applicationId + "~" + operatorEmail + "~" + expirationDate;
 
             token = Base64.getEncoder().encodeToString(tokenInClear.getBytes(StandardCharsets.UTF_8));
-            System.out.println(token);
         } catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }

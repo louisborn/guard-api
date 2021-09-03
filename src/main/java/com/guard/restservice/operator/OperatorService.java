@@ -78,6 +78,21 @@ public class OperatorService {
         }
     }
 
+    @Transactional
+    public void saveOperatorToken(Optional<Operator> operator, String token) {
+        try {
+            if(!operator.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            Operator operator1 = operator.get();
+
+            operator1.setToken(token);
+            operatorRepository.save(operator1);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     public List<Operator> getOperators() {
         return operatorRepository.findAll();
     }
