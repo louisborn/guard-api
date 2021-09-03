@@ -18,6 +18,7 @@ public class TokenService {
     private String token;
     private String deviceId;
     private String applicationId;
+    private long operatorId;
     private String operatorEmail;
 
     private TokenStatus tokenStatus;
@@ -32,6 +33,8 @@ public class TokenService {
     public String getToken() {
         return token;
     }
+
+    public long getOperatorId() { return operatorId; }
 
     public TokenStatus getTokenStatus() {
         return tokenStatus;
@@ -54,6 +57,7 @@ public class TokenService {
             }
             this.deviceId = deviceId;
             this.applicationId = applicationId;
+            this.operatorId = operator.get().getId();
             this.operatorEmail = operator.get().getEmail();
             if(token.isEmpty()) {
                 generateToken();

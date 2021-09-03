@@ -42,6 +42,7 @@ public class TokenController {
             case NEW:
                 response.put("status", "NEW");
                 response.put("token", tokenService.getToken());
+                response.put("id", String.valueOf(tokenService.getOperatorId()));
                 break;
         }
         return response;
