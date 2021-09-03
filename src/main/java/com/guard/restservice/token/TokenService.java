@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,7 +60,7 @@ public class TokenService {
             this.applicationId = applicationId;
             this.operatorId = operator.get().getId();
             this.operatorEmail = operator.get().getEmail();
-            if(token.isEmpty()) {
+            if(Objects.equals(token, "")) {
                 generateToken();
                 tokenStatus = TokenStatus.NEW;
                 return;
