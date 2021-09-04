@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class OperatorController {
@@ -21,6 +22,12 @@ public class OperatorController {
     @GetMapping(path = "operators")
     public List<Operator> getOperators() {
         return operatorService.getOperators();
+    }
+
+    @PutMapping(path = "operators/token")
+    public void setNewToken() {
+        Optional<Operator> optional = operatorService.getOperatorByEmail("john.williams@bosch.de");
+        operatorService.saveOperatorToken(optional, "false-token");
     }
 
     @GetMapping(path = "/")
