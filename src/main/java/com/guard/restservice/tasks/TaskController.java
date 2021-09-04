@@ -16,27 +16,23 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    /** Used to validate the unique operator token
-     *  included in the api requests' header.
-     *  If the token validation fails, the request is denied.
-     */
     private final TokenService tokenService;
 
     @Autowired
-    public TaskController(TaskService taskService, TokenService tokenService) {
+    public TaskController(
+            TaskService taskService,
+            TokenService tokenService) {
         this.taskService = taskService;
         this.tokenService = tokenService;
     }
 
-    @GetMapping(path = "tasks")
-    public List<Task> getTasks(
-            @RequestHeader(name = "X-TOKEN") String token
-    ) {
-        tokenService.validateTokenAtRequest(token);
-
-        return taskService.getTasks();
-    }
-
+    /** Returns a list of tasks assigned to a specific operator
+     *
+     * @param id the unique operator id.
+     * @param token the operator token. Needs to
+     *              be validated first. If validation
+     *              fails the request is aborted.
+     */
     @GetMapping(path = "tasks/{operatorId}")
     public List<Task> getTasksByOperatorId(
             @PathVariable("operatorId") Long id,
@@ -48,6 +44,13 @@ public class TaskController {
         return Collections.emptyList();
     }
 
+    /** Deletes a single task
+     *
+     * @param id the id of the task.
+     * @param token the operator token. Needs to
+     *              be validated first. If validation
+     *              fails the request is aborted.
+     */
     @DeleteMapping(path = "tasks/{taskId}/delete")
     public Map<String, String> deleteTaskById(
             @PathVariable("taskId") Long id,
@@ -63,6 +66,12 @@ public class TaskController {
         return response;
     }
 
+    /** Deletes all completed tasks assigned to one operator.
+     *
+     * @param token the operator token. Needs to be validated
+     *              first. If validation fails the request is
+     *              aborted.
+     */
     @DeleteMapping(path = "tasks/delete")
     public Map<String, String> deleteAllCompletedTasks(
             @RequestHeader(name = "X-TOKEN") String token
@@ -77,6 +86,13 @@ public class TaskController {
         return response;
     }
 
+    /** Marks a task as completed.
+     *
+     * @param id the unique task id.
+     * @param token the operator token. Needs to be validated
+     *              first. If validation fails the request is
+     *              aborted.
+     */
     @PutMapping(path = "tasks/{taskId}/update")
     public Map<String, String> updateTaskStatus(
             @PathVariable("taskId") long id,
