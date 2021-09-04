@@ -12,7 +12,7 @@ import java.util.Map;
 @RestController
 public class TaskController {
     /** The response map after a request */
-    private final Map<String, Boolean> response = new HashMap<>();
+    private final Map<String, String> response = new HashMap<>();
 
     private final TaskService taskService;
 
@@ -49,40 +49,48 @@ public class TaskController {
     }
 
     @DeleteMapping(path = "tasks/{taskId}/delete")
-    public Map<String, Boolean> deleteTaskById(
+    public Map<String, String> deleteTaskById(
             @PathVariable("taskId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        //tokenService.validateTokenAtRequest(token);
+        if(tokenService.validateTokenAtRequest(token)) {
+            taskService.deleteTaskById(id);
 
-        taskService.deleteTaskById(id);
-
-        response.put("deleted", Boolean.TRUE);
+            response.put("STATUS", "DELETED");
+            return response;
+        }
+        response.put("STATUS", "UNAUTHORIZED");
         return response;
     }
 
     @DeleteMapping(path = "tasks/delete")
-    public Map<String, Boolean> deleteAllCompletedTasks(
+    public Map<String, String> deleteAllCompletedTasks(
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        //tokenService.validateTokenAtRequest(token);
+        if(tokenService.validateTokenAtRequest(token)) {
+            taskService.deleteAllCompletedTasks(token);
 
-        taskService.deleteAllCompletedTasks(token);
+            response.put("STATUS", "DELETED_COMPLETED");
+            return response;
+        }
 
-        response.put("deleted", Boolean.TRUE);
+        response.put("STATUS", "UNAUTHORIZED");
         return response;
     }
 
     @PutMapping(path = "tasks/{taskId}/update")
-    public Map<String, Boolean> updateTaskStatus(
+    public Map<String, String> updateTaskStatus(
             @PathVariable("taskId") long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        //tokenService.validateTokenAtRequest(token);
+        if(tokenService.validateTokenAtRequest(token)) {
+            taskService.updateTaskStatus(id);
 
-        taskService.updateTaskStatus(id);
+            response.put("STATUS", "UPDATED");
+            return response;
+        }
 
-        response.put("updated", Boolean.TRUE);
+        response.put("STATUS", "UNAUTHORIZED");
         return response;
     }
 }
