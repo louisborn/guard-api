@@ -127,7 +127,7 @@ public class TokenService {
         }
     }
 
-    public void validateTokenAtRequest(String token) {
+    public boolean validateTokenAtRequest(String token) {
         try {
             byte[] bytes = Base64.getDecoder().decode(token);
             String decrypted = new String(bytes);
@@ -136,19 +136,20 @@ public class TokenService {
 
             Optional<Operator> operator = operatorService.getOperatorByDeviceId(parts[0]);
             if(!operator.isPresent()) {
-                tokenStatus = TokenStatus.LOGIN_REQUIRED;
-                return;
+                return false;
             }
 
             if(!operator.get().getApplicationId().equals(parts[1])) {
-                tokenStatus = TokenStatus.INVALID;
-                return;
+                return false;
             }
             if(!operator.get().getEmail().equals(parts[2])) {
-                tokenStatus = TokenStatus.INVALID;
-                return;
+                return false;
             }
-            tokenStatus = TokenStatus.VALID;
+            String expirationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            if(!expirationDate.equals(parts[3])) {
+                return false;
+            }
+            return true;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
