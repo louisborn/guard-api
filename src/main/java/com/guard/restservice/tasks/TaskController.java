@@ -57,9 +57,9 @@ public class TaskController {
             taskService.deleteTaskById(id);
 
             response.put("STATUS", "DELETED");
-            return response;
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
         }
-        response.put("STATUS", "UNAUTHORIZED");
         return response;
     }
 
@@ -71,10 +71,9 @@ public class TaskController {
             taskService.deleteAllCompletedTasks(token);
 
             response.put("STATUS", "DELETED_COMPLETED");
-            return response;
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
         }
-
-        response.put("STATUS", "UNAUTHORIZED");
         return response;
     }
 
@@ -87,10 +86,10 @@ public class TaskController {
             taskService.updateTaskStatus(id);
 
             response.put("STATUS", "UPDATED");
-            return response;
         }
-
-        response.put("STATUS", "UNAUTHORIZED");
+        else {
+            response.put("STATUS", "UNAUTHORIZED");
+        }
         return response;
     }
 }
