@@ -45,8 +45,7 @@ public class TaskController {
         if(tokenService.validateTokenAtRequest(token)) {
             return taskService.getTasksByOperatorId(id);
         }
-        return null;
-        //return Collections.emptyList();
+        return Collections.emptyList();
     }
 
     @DeleteMapping(path = "tasks/{taskId}/delete")
