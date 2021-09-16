@@ -13,6 +13,9 @@ public class Location {
     private String floor;
     private String room;
 
+    public Location() {
+    }
+
     public Location(long id, String building, String floor, String room) {
         this.id = id;
         this.building = building;
