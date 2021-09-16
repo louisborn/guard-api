@@ -45,6 +45,7 @@ public class DebugConfiguration {
             Location location4 = new Location("B1", "Ground floor", "2");
             Location location5 = new Location("B1", "Ground floor", "Meeting 2a");
             Location location6 = new Location("C1", "Second floor", "55c");
+            Location location7 = new Location("No specific location", "", "");
 
             operatorRepository.save(john);
 
@@ -63,6 +64,7 @@ public class DebugConfiguration {
             locationRepository.save(location4);
             locationRepository.save(location5);
             locationRepository.save(location6);
+            locationRepository.save(location7);
 
         };
     }
