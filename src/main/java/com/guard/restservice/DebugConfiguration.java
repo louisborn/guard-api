@@ -1,5 +1,7 @@
 package com.guard.restservice;
 
+import com.guard.restservice.locations.Location;
+import com.guard.restservice.locations.LocationRepository;
 import com.guard.restservice.notes.Note;
 import com.guard.restservice.notes.NoteRepository;
 import com.guard.restservice.operator.Operator;
@@ -16,7 +18,7 @@ import java.util.List;
 public class DebugConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository) {
+    CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository, LocationRepository locationRepository) {
         return args -> {
             //bramble-RQ3A.210805.001.A1
             Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "","", "");
@@ -37,6 +39,13 @@ public class DebugConfiguration {
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
                     "John R. Williams", "05:00:45", "2021-09-18", false, true);
 
+            Location location1 = new Location("A1", "Garage", "");
+            Location location2 = new Location("A1", "Ground floor", "1");
+            Location location3 = new Location("B1", "Garage", "");
+            Location location4 = new Location("B1", "Ground floor", "2");
+            Location location5 = new Location("B1", "Ground floor", "Meeting 2a");
+            Location location6 = new Location("C1", "Second floor", "55c");
+
             operatorRepository.save(john);
 
             taskRepository.save(task1);
@@ -47,6 +56,14 @@ public class DebugConfiguration {
             taskRepository.save(task6);
 
             noteRepository.save(note1);
+
+            locationRepository.save(location1);
+            locationRepository.save(location2);
+            locationRepository.save(location3);
+            locationRepository.save(location4);
+            locationRepository.save(location5);
+            locationRepository.save(location6);
+
         };
     }
 }
