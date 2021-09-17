@@ -39,13 +39,13 @@ public class DebugConfiguration {
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
                     "John R. Williams", "05:00:45", "2021-09-18", false, true);
 
-            Location location1 = new Location("A1", "Garage", "");
+            Location location1 = new Location("A1", "Garage", "-");
             Location location2 = new Location("A1", "Ground floor", "1");
-            Location location3 = new Location("B1", "Garage", "");
+            Location location3 = new Location("B1", "Garage", "-");
             Location location4 = new Location("B1", "Ground floor", "2");
             Location location5 = new Location("B1", "Ground floor", "Meeting 2a");
             Location location6 = new Location("C1", "Second floor", "55c");
-            Location location7 = new Location("No specific location", "", "");
+            Location location7 = new Location("No specific location", "-", "-");
 
             operatorRepository.save(john);
 
