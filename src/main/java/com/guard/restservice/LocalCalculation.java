@@ -11,13 +11,13 @@ import java.time.format.DateTimeFormatter;
 public class LocalCalculation {
 
     public String calculateLocalTime() {
-        LocalTime localTime = LocalTime.now();
+        LocalTime localTime = LocalTime.now(ZoneId.of("ECT"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         return localTime.format(formatter);
     }
 
     public String calculateLocalDate() {
-        LocalDate localDate = LocalDate.now(ZoneId.of("ECT"));
+        LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return localDate.format(formatter);
     }
