@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @org.springframework.stereotype.Service
@@ -16,7 +17,7 @@ public class LocalCalculation {
     }
 
     public String calculateLocalDate() {
-        LocalDate localDate = LocalDate.now();
+        LocalDate localDate = LocalDate.now(ZoneId.of("ECT"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return localDate.format(formatter);
     }
