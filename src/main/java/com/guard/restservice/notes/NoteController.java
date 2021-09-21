@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 public class NoteController {
     /** The response map after a request */
-    private final Map<String, Boolean> response = new HashMap<>();
+    private final Map<String, String> response = new HashMap<>();
 
     private final NoteService noteService;
 
@@ -39,20 +39,21 @@ public class NoteController {
      }
 
     @PostMapping(path = "notes/add")
-    public Map<String, Boolean> addNote(
+    public Map<String, String> addNote(
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
-        tokenService.validateTokenAtRequest(token);
-
-        noteService.addNote(token, note);
-
-        response.put("added", Boolean.TRUE);
+        if(tokenService.validateTokenAtRequest(token)) {
+            noteService.addNote(token, note);
+            response.put("STATUS", "ADDED");
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
+        }
         return response;
     }
 
     @DeleteMapping(path = "notes/delete/{noteId}")
-    public Map<String, Boolean> deleteNoteById(
+    public Map<String, String> deleteNoteById(
             @PathVariable("noteId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
@@ -60,12 +61,11 @@ public class NoteController {
 
         noteService.deleteNoteById(id);
 
-        response.put("deleted", Boolean.TRUE);
         return response;
     }
 
     @PutMapping(path = "notes/update/{noteId}")
-    public Map<String, Boolean> updateNoteById(
+    public Map<String, String> updateNoteById(
             @PathVariable("noteId") Long id,
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
@@ -74,7 +74,6 @@ public class NoteController {
 
         noteService.updateNoteById(id, note);
 
-        response.put("updated", Boolean.TRUE);
         return response;
     }
 }
