@@ -17,6 +17,8 @@ import java.util.Optional;
 @Service
 public class TokenService {
 
+    private Optional<Operator> operator;
+
     private String token;
     private String deviceId;
     private String applicationId;
@@ -48,7 +50,7 @@ public class TokenService {
                 tokenStatus = TokenStatus.INVALID;
                 return;
             }
-            Optional<Operator> operator = operatorService.getOperatorByDeviceId(deviceId);
+            operator = operatorService.getOperatorByDeviceId(deviceId);
             if(!operator.isPresent()) {
                 tokenStatus = TokenStatus.LOGIN_REQUIRED;
                 return;
@@ -108,6 +110,7 @@ public class TokenService {
                 tokenStatus = TokenStatus.INVALID;
                 return;
             }
+            operatorService.saveOperatorToken(operator, token);
             tokenStatus = TokenStatus.VALID;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
