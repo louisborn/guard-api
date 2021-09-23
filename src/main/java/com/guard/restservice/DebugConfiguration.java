@@ -37,7 +37,7 @@ public class DebugConfiguration {
                     "Default description for test ask", false,false);
 
             Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
-                    "John R. Williams", "05:00:45", "2021-09-18", false, true);
+                    "John R. Williams", "05:00", "2021-09-18", false, true);
 
             Location location1 = new Location("A1", "Garage", "-");
             Location location2 = new Location("A1", "Ground floor", "1");

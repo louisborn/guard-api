@@ -17,7 +17,7 @@ public class LocalCalculation {
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         return ZonedDateTime
                 .now( zoneId )
-                .format( DateTimeFormatter.ofPattern( "HH.mm.ss" ) );
+                .format( DateTimeFormatter.ofPattern( "HH.mm" ) );
     }
 
     public String calculateLocalDate() {
