@@ -3,10 +3,7 @@ package com.guard.restservice;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -17,8 +14,9 @@ public class LocalCalculation {
         //LocalTime localTime = LocalTime.now(ZoneId.of("ECT"));
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         //return localTime.format(formatter);
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
         return ZonedDateTime
-                .now( ZoneId.systemDefault() )
+                .now( zoneId )
                 .format( DateTimeFormatter.ofPattern( "HH.mm.ss" ) );
     }
 
