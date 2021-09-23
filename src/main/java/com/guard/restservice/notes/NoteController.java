@@ -4,6 +4,7 @@ import com.guard.restservice.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,11 @@ public class NoteController {
     public List<Note> getNotes(
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
-
-        return noteService.getNotes();
+        if(tokenService.validateTokenAtRequest(token)) {
+            return noteService.getNotes();
+        } else {
+            return Collections.emptyList();
+        }
      }
 
     @PostMapping(path = "notes/add")
