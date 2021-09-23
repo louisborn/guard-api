@@ -73,10 +73,12 @@ public class NoteController {
             @RequestHeader(name = "X-TOKEN") String token,
             @RequestBody Note note
     ) {
-        tokenService.validateTokenAtRequest(token);
-
-        noteService.updateNoteById(id, note);
-
+        if(tokenService.validateTokenAtRequest(token)) {
+            noteService.updateNoteById(id, note);
+            response.put("STATUS", "UPDATED");
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
+        }
         return response;
     }
 }

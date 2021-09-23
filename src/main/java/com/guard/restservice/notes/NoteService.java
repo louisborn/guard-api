@@ -65,7 +65,7 @@ public class NoteService {
             Note updatedNote = noteRepository.getOne(id);
 
             updatedNote.setTitle(note.getTitle());
-            updatedNote.setLocation(note.getLocation());
+            //updatedNote.setLocation(note.getLocation());
             updatedNote.setHasPriority(note.getHasPriority());
             updatedNote.setDescription(note.getDescription());
             updatedNote.setHasUpdate(true);
