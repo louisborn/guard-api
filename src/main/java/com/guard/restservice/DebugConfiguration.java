@@ -36,7 +36,7 @@ public class DebugConfiguration {
             Task task6 = new Task(1, "Test task no.: 6" ,"C1, second floor, Room 5", "06:50:32","2021-09-18",
                     "Default description for test ask", false,false);
 
-            Note note1 = new Note("New employee starts today", "-", "Andre Müller starts today. Only duo patrols.",
+            Note note1 = new Note("New employee starts today", "No specific location, -, -", "Andre Meier starts his first shift today at 9:00am. Please someone take over the introduction and show him all the important places (Cafeteria, locker room etc). In addition please give a short tour of the building.",
                     "John R. Williams", "05:00", "2021-09-18", false, true);
 
             Location location1 = new Location("A1", "Garage", "-");
