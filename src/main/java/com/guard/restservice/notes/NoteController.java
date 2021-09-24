@@ -60,10 +60,12 @@ public class NoteController {
             @PathVariable("noteId") Long id,
             @RequestHeader(name = "X-TOKEN") String token
     ) {
-        tokenService.validateTokenAtRequest(token);
-
-        noteService.deleteNoteById(id);
-
+        if(tokenService.validateTokenAtRequest(token)) {
+            noteService.deleteNoteById(id);
+            response.put("STATUS", "DELETED");
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
+        }
         return response;
     }
 
