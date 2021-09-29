@@ -3,6 +3,18 @@ package com.guard.restservice.emergency;
 import javax.persistence.*;
 import java.util.List;
 
+class EmergencyCase {
+    private List<String> emergencyCases;
+
+    public List<String> getEmergencyCases() {
+        return emergencyCases;
+    }
+
+    public void setEmergencyCases(List<String> emergencyCases) {
+        this.emergencyCases = emergencyCases;
+    }
+}
+
 @Entity
 @Table
 public class Emergency {
@@ -15,7 +27,7 @@ public class Emergency {
     private String sender;
     private String time;
     private String date;
-    @OneToMany(targetEntity=Emergency.class, fetch=FetchType.EAGER)
+    @ElementCollection
     private List<String> emergencyCases;
     private boolean isActive;
 
