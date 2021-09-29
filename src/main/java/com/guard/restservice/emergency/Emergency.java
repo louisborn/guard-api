@@ -15,6 +15,7 @@ public class Emergency {
     private String sender;
     private String time;
     private String date;
+    @OneToMany(targetEntity=Emergency.class, fetch=FetchType.EAGER)
     private List<String> emergencyCases;
     private boolean isActive;
 
