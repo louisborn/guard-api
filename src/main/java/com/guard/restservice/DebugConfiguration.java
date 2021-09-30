@@ -1,5 +1,7 @@
 package com.guard.restservice;
 
+import com.guard.restservice.emergency.Emergency;
+import com.guard.restservice.emergency.EmergencyRepository;
 import com.guard.restservice.locations.Location;
 import com.guard.restservice.locations.LocationRepository;
 import com.guard.restservice.notes.Note;
@@ -12,13 +14,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
 import java.util.List;
 
 @org.springframework.context.annotation.Configuration
 public class DebugConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository, LocationRepository locationRepository) {
+    CommandLineRunner commandLineRunner(OperatorRepository operatorRepository, TaskRepository taskRepository, NoteRepository noteRepository, LocationRepository locationRepository, EmergencyRepository emergencyRepository) {
         return args -> {
             //bramble-RQ3A.210805.001.A1
             Operator john = new Operator("John Williams", "john.williams@bosch.de", "abc123", "","", "");
@@ -47,6 +50,8 @@ public class DebugConfiguration {
             Location location6 = new Location("C1", "Second floor", "55c");
             Location location7 = new Location("No specific location", "-", "-");
 
+            Emergency emergency1 = new Emergency(2, 0,"Markus Müller", "14:45", "2021-09-30", Collections.emptyList(), true);
+
             operatorRepository.save(john);
 
             taskRepository.save(task1);
@@ -65,6 +70,8 @@ public class DebugConfiguration {
             locationRepository.save(location5);
             locationRepository.save(location6);
             locationRepository.save(location7);
+
+            emergencyRepository.save(emergency1);
 
         };
     }
