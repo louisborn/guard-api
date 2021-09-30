@@ -53,4 +53,18 @@ public class EmergencyController {
         }
         return response;
     }
+
+    @PutMapping(path = "emergency/end/{emergencyId}")
+    public Map<String, String> endEmergency(
+            @PathVariable(name = "emergencyId") long id,
+            @RequestHeader(name = "X-TOKEN") String token
+    ) {
+        if(tokenService.validateTokenAtRequest(token)) {
+            emergencyService.endEmergency(id);
+            response.put("STATUS", "SUCCESS");
+        } else {
+            response.put("STATUS", "UNAUTHORIZED");
+        }
+        return response;
+    }
 }

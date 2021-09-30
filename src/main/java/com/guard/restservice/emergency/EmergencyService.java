@@ -49,4 +49,15 @@ public class EmergencyService {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
     }
+
+    public void endEmergency(long id) {
+        try {
+            Emergency emergency = emergencyRepository.findEmergencyById(id);
+            emergency.setActive(false);
+
+            emergencyRepository.save(emergency);
+        } catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+    }
 }

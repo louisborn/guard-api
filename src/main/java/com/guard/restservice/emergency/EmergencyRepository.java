@@ -11,4 +11,7 @@ import java.util.List;
 public interface EmergencyRepository extends JpaRepository<Emergency, Long> {
     @Query("SELECT e FROM Emergency e WHERE e.operatorId=?1")
     List<Emergency> findEmergencyByOperatorId(long operatorId);
+
+    @Query("SELECT e FROM Emergency e WHERE e.id=?1")
+    Emergency findEmergencyById(long id);
 }
