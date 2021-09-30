@@ -50,7 +50,6 @@ public class DebugConfiguration {
             Location location6 = new Location("C1", "Second floor", "55c");
             Location location7 = new Location("No specific location", "-", "-");
 
-            Emergency emergency1 = new Emergency(2, 0,"Markus Müller", "14:45", "2021-09-30", Collections.emptyList(), true);
 
             operatorRepository.save(john);
 
@@ -70,8 +69,6 @@ public class DebugConfiguration {
             locationRepository.save(location5);
             locationRepository.save(location6);
             locationRepository.save(location7);
-
-            emergencyRepository.save(emergency1);
 
         };
     }

@@ -54,6 +54,7 @@ public class EmergencyService {
         try {
             Emergency emergency = emergencyRepository.findEmergencyById(id);
             emergency.setActive(false);
+            emergency.setEndDate(globalService.calculateLocalTime());
 
             emergencyRepository.save(emergency);
         } catch(Exception e) {

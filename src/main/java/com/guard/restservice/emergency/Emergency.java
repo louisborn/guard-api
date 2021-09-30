@@ -27,6 +27,7 @@ public class Emergency {
     private String sender;
     private String time;
     private String date;
+    private String endDate;
     @ElementCollection
     private List<String> emergencyCases;
     private boolean isActive;
@@ -34,23 +35,25 @@ public class Emergency {
     public Emergency() {
     }
 
-    public Emergency(long operatorId, double affectedPeople, String sender, String time, String date, List<String> emergencyCases, boolean isActive) {
+    public Emergency(long operatorId, double affectedPeople, String sender, String time, String date, String endDate, List<String> emergencyCases, boolean isActive) {
         this.operatorId = operatorId;
         this.affectedPeople = affectedPeople;
         this.sender = sender;
         this.time = time;
         this.date = date;
+        this.endDate = endDate;
         this.emergencyCases = emergencyCases;
         this.isActive = isActive;
     }
 
-    public Emergency(long id, long operatorId, double affectedPeople, String sender, String time, String date, List<String> emergencyCases, boolean isActive) {
+    public Emergency(long id, long operatorId, double affectedPeople, String sender, String time, String date, String endDate,List<String> emergencyCases, boolean isActive) {
         this.id = id;
         this.operatorId = operatorId;
         this.affectedPeople = affectedPeople;
         this.sender = sender;
         this.time = time;
         this.date = date;
+        this.endDate = endDate;
         this.emergencyCases = emergencyCases;
         this.isActive = isActive;
     }
@@ -101,6 +104,10 @@ public class Emergency {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public void setEmergencyCases(List<String> emergencyCases) {
